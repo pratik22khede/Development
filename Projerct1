@@ -1,0 +1,117 @@
+@model AspDotNetAndAjax.ViewModels.AddDetails
+<br />
+<br />
+<div class="container">
+    <form  asp-action="Create" asp-controller="Home" method="post">
+        <div class="row">
+            <div class="col-4">
+                <label asp-for="@Model.FirstName"></label>
+                <input type="text" asp-for="@Model.FirstName" class="form-control" />
+            </div>
+            <div class="col-4">
+                <label asp-for="@Model.MiddleName"></label>
+                <input type="text" asp-for="@Model.MiddleName" class="form-control" />
+            </div>
+            <div class="col-4">
+                <label asp-for="@Model.LastName"></label>
+                <input type="text" asp-for="@Model.LastName" class="form-control" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <label asp-for="@Model.Email"></label>
+                <input type="text" asp-for="@Model.Email" class="form-control" />
+            </div>
+        </div>
+        <br />
+
+        <div class="table-responsive">
+            <span asp-validation-for="@Model.Education[0].School" class="text-danger"></span>
+
+            <h2 class="content-caption mb-0 d-flex justify-content-between">
+                Education
+                <a class="btn-add add-recordEducation" data-added="0"><i class="la la-plus la-lg"></i></a>
+            </h2>
+            <table class="table table-bordered m-0" id="tbl_posts2">
+                <thead>
+                    <tr>
+                        <th>School Name</th>
+                        <th>Date of Completion</th>
+                        <th>Interest</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl_posts_body2">
+                    <tr id="re-0">
+                        <td><input asp-for="@Model.Education[0].School" type="text" placeholder="" class="form-control"></td>
+                        <td><input asp-for="@Model.Education[0].CompletionDate" type="text" placeholder="" class="form-control"></td>
+                        <td><input asp-for="@Model.Education[0].Interest" type="text" placeholder="" class="form-control"></td>
+                        <td class="text-center"><a class="btn btn-xs delete-edurecord" edu-data-id="1"><i class="la la-trash la-lg text-danger"></i></a></td>
+                    </tr>
+
+                </tbody>
+                <tbody id="Edu-2">
+                </tbody>
+            </table>
+        </div>
+    </form>
+    <button class="btn btn-success btn-block">Submit</button>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            alert("Page Load");
+
+            //Education
+            var j = 1;
+            $('a.add-recordEducation').click(function () {
+                $("#Edu-2").append('<tr><td><input name="Education[' + j + '].School" type="text" class="form-control"></td><td><input name="Education[' + j + '].Degree" type="text" placeholder="" class="form-control"></td><td><input name="Education[' + j + '].Interest" type="text" placeholder="" class="form-control" ></td><td class="text-center"><a class="btn btn-xs delete-edurecord" edu-data-id="1"><i class="la la-trash la-lg text-danger"></i></a></td></tr>');
+                j++;
+            });
+            $('#Edu-2').on('click', '.delete-edurecord', function () {
+                $(this).parent().parent().remove();
+
+            });
+
+
+
+        });
+    </script>
+
+}
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace AspDotNetAndAjax.ViewModels
+{
+    public class AddDetails
+    {
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        [Required]
+        public string LastName { get; set; }
+
+        [Required]
+        public string Email { get; set; }
+
+        [Required]
+        public DateTime DOB { get; set; }
+
+
+        public List<EmployeeEducationViewModel> Education { get; set; }
+    }
+
+    public class EmployeeEducationViewModel
+    {
+        [Required]
+        public string School { get; set; }
+        public DateTime? CompletionDate { get; set; }
+        public string Interest { get; set; }
+
+    }
+
+}
